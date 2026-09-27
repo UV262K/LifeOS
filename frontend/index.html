@@ -1,1 +1,416 @@
-The requested file reference is not currently visible. Use files.search or files.list to rediscover the file, then retry with a returned ref_id or file_id.
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LifeOS — Your Week</title>
+<style>
+:root{
+ --bg:#f7f8f5;--surface:#fff;--ink:#18211f;--muted:#71807a;--line:#e7ebe8;
+ --ota:#f29d49;--career:#5b8def;--college:#8b6fe8;--track:#54b879;--food:#ef7668;--life:#d7aa45;
+ --accent:#2f8f72;--shadow:0 8px 30px rgba(30,50,42,.07)
+}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input{font:inherit}button{cursor:pointer}
+.app{max-width:1180px;margin:auto;padding:24px 22px 100px}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.brand{font-size:23px;font-weight:850;letter-spacing:-.6px}.brand span{color:var(--accent)}
+.nav{display:flex;gap:6px}.nav button{border:0;background:transparent;padding:9px 12px;border-radius:10px;color:var(--muted)}
+.nav button.active,.nav button:hover{background:#eaf3ef;color:var(--ink)}
+h1{font-size:36px;letter-spacing:-1.4px;margin:0 0 5px}.sub{color:var(--muted);margin-bottom:24px}
+.layout{display:grid;grid-template-columns:1.55fr .75fr;gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:20px}
+.panel-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.panel-title h2{font-size:17px;margin:0}.link{border:0;background:none;color:var(--accent);font-weight:700}
+.goal{padding:16px;border-radius:15px;background:#f0f6f3;margin-bottom:16px}.goal b{font-size:16px}.goal small{display:block;color:var(--muted);margin-top:4px}
+.modules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.module{border:1px solid var(--line);border-radius:17px;padding:16px;position:relative;transition:.18s}.module:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(30,50,42,.06)}
+.mhead{display:flex;gap:11px;align-items:center}.icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;background:#f3f5f4}
+.mname{font-weight:800}.meta{font-size:12px;color:var(--muted);margin-top:3px}.progress{height:6px;background:#edf0ee;border-radius:99px;margin:14px 0 11px;overflow:hidden}.progress i{display:block;height:100%;border-radius:99px;width:0}
+.mfoot{display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--muted)}
+.logbtn{border:0;background:#f0f6f3;color:var(--accent);padding:7px 10px;border-radius:9px;font-weight:800}
+.calendar{font-size:12px}.calhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.calhead strong{font-size:15px}.calnav button{border:0;background:#f2f4f2;border-radius:8px;width:29px;height:29px}
+.weekdays,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center;gap:4px}.weekdays{color:#99a49f;margin-bottom:5px;font-weight:700}.day{height:32px;display:grid;place-items:center;border-radius:9px;position:relative}.day.muted{color:#c4cbc7}.day.today{background:var(--ink);color:white;font-weight:800}.day.logged:after{content:"";position:absolute;bottom:3px;width:4px;height:4px;border-radius:50%;background:var(--accent)}.day.today.logged:after{background:#fff}
+.dayinfo{margin-top:15px;border-top:1px solid var(--line);padding-top:14px}.dayinfo b{font-size:13px}.dayinfo p{color:var(--muted);font-size:12px;margin:5px 0}
+.quick{margin-top:18px;display:flex;gap:9px}.quick input{min-width:0;flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 13px;outline:none;background:#fbfcfb}.quick input:focus{border-color:#b8d9cc}.quick button{border:0;background:var(--ink);color:white;border-radius:12px;padding:0 17px;font-weight:800}
+.week{margin-top:18px}.weekgrid{display:grid;grid-template-columns:120px repeat(7,1fr);font-size:11px;gap:5px;align-items:center}.weekgrid>div{min-height:30px;display:grid;place-items:center}.weekgrid .label{justify-content:start;display:flex;font-weight:750;font-size:12px}.tick{width:25px;height:25px;border-radius:8px;background:#f1f3f1;color:#a6b0ab;display:grid;place-items:center}.tick.on{background:#e4f2ec;color:var(--accent);font-weight:900}
+.view{display:none}.view.active{display:block}
+.empty{text-align:center;padding:35px;color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(20,28,25,.35);display:none;place-items:center;padding:20px;z-index:5}.modal.open{display:grid}.modalbox{width:min(520px,100%);background:white;border-radius:20px;padding:22px;box-shadow:0 25px 70px rgba(0,0,0,.18)}.modalbox h2{margin:0 0 16px}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{margin-bottom:12px}.field label{display:block;font-size:12px;color:var(--muted);font-weight:750;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fbfcfb}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:15px}.secondary,.primary{border:0;border-radius:10px;padding:10px 14px;font-weight:800}.secondary{background:#eef1ef}.primary{background:var(--ink);color:white}
+.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:11px 15px;border-radius:11px;font-size:13px;transition:.2s;z-index:10}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.modules{grid-template-columns:1fr 1fr}.nav{display:none}}
+@media(max-width:560px){.app{padding:18px 13px 80px}h1{font-size:30px}.modules{grid-template-columns:1fr}.weekgrid{grid-template-columns:85px repeat(7,1fr);font-size:9px}.panel{padding:15px}}
+
+.progressChart{width:100%;overflow:hidden}.chartSvg{width:100%;height:290px;display:block}.chartGrid{stroke:#e9eeeb;stroke-width:1}.chartLine{fill:none;stroke:#2f8f72;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chartDot{fill:#fff;stroke:#2f8f72;stroke-width:3}.chartLabel{fill:#89958f;font-size:11px}.chartValue{fill:#3b4843;font-size:11px;font-weight:700}.statRow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}.statRow:last-child{border-bottom:0}.statRow span{color:var(--muted)}
+
+.module-page-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}.backbtn{border:0;background:#eef1ef;border-radius:10px;padding:9px 12px;color:var(--ink);font-weight:750}.dayrow{display:grid;grid-template-columns:105px 1fr auto;gap:14px;align-items:center;padding:15px 0;border-bottom:1px solid var(--line)}.dayrow:last-child{border-bottom:0}.dayname{font-weight:800}.dayplan{color:var(--muted);font-size:13px}.dayplan strong{color:var(--ink)}.daystate{font-size:12px;font-weight:800}.daystate.planned{color:var(--accent)}.daystate.off{color:#a6afaa}.schedule-input{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:#fbfcfb}.schedule-grid{display:grid;grid-template-columns:100px 1fr;gap:10px;align-items:center}.checkdays{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}.checkday{border:1px solid var(--line);background:#fafbfa;border-radius:10px;padding:9px 5px;text-align:center;font-size:12px}.checkday input{margin-right:4px}.smallmuted{font-size:11px;color:var(--muted)}
+@media(max-width:600px){.module-page-head{align-items:flex-start;flex-wrap:wrap}.dayrow{grid-template-columns:80px 1fr}.daystate{grid-column:2}.checkdays{grid-template-columns:repeat(4,1fr)}}
+
+.finhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}.finhead .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.finbig{font-size:26px;font-weight:850}.finrow{display:grid;grid-template-columns:90px 1fr auto auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}.finrow:last-child{border-bottom:0}.finrow .x{border:0;background:none;color:#b0b8b4;font-size:16px}.finrow .x:hover{color:#d9534f}
+.progress.tall{height:12px;margin:8px 0 14px}.field select,.field input[type=color]{width:100%}.field input[type=color]{height:40px;padding:3px}
+@media(max-width:600px){.finrow{grid-template-columns:70px 1fr auto}.finrow .x{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand">Life<span>OS</span></div><nav class="nav">
+<button class="active" data-view="home">Home</button><button data-view="week">Week</button><button data-view="goals">Goals</button><button data-view="finance">Finance</button><button data-view="progress">Progress</button><button data-view="settings">Settings</button>
+</nav></header>
+
+<section id="home" class="view active">
+<h1>Good morning 👋</h1><div class="sub" id="subtitle">Let's keep the important things moving.</div>
+<div class="layout">
+<div>
+<div class="goal"><b id="focusTitle">This week's focus</b><small id="focusText">Set a goal and build a routine around it.</small></div>
+<div class="panel"><div class="panel-title"><h2>My modules</h2><button class="link" onclick="openModule()">+ Add module</button></div><div class="modules" id="modules"></div>
+<div class="quick"><input id="quick" placeholder="Quick log — “45 min maths, 4km run…”"><button onclick="quickLog()">Log</button></div></div>
+</div>
+<div>
+<div class="panel calendar"><div class="calhead"><button class="calnav" onclick="changeMonth(-1)">‹</button><strong id="monthName"></strong><div class="calnav"><button onclick="changeMonth(1)">›</button></div></div>
+<div class="weekdays"><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div></div><div class="days" id="days"></div>
+<div class="dayinfo"><b id="selectedDate"></b><p id="selectedInfo">Select a day to see its logs.</p></div></div>
+<div class="panel" style="margin-top:18px"><div class="panel-title"><h2>LifeOS noticed</h2></div><p id="insight" class="sub" style="margin:0">Log a few days and LifeOS will show useful patterns here.</p></div>
+</div>
+</div>
+</section>
+
+
+<section id="moduleWeek" class="view">
+<div class="module-page-head">
+<button class="backbtn" onclick="show('home')">← Home</button>
+<div>
+<h1 id="moduleWeekTitle">Module</h1>
+<div class="sub" id="moduleWeekSub">Your weekly plan.</div>
+</div>
+<button class="primary" onclick="editCurrentModule()">Edit module</button>
+</div>
+<div class="panel">
+<div class="panel-title"><h2>This module's week</h2><button class="link" onclick="editCurrentModuleWeek()">Edit weekly schedule</button></div>
+<div id="moduleDays"></div>
+</div>
+</section>
+
+<section id="week" class="view">
+<h1>Your week</h1><div class="sub">A simple view of what you planned and what you actually did.</div>
+<div class="panel"><div class="panel-title"><h2>Weekly routine</h2><button class="link" onclick="openRoutine()">Edit routines</button></div><div class="weekgrid" id="weekgrid"></div></div>
+</section>
+
+<section id="goals" class="view">
+<h1>Goals</h1><div class="sub">Your modules exist to move these forward.</div>
+<div class="panel"><div class="panel-title"><h2>My goals</h2><button class="link" onclick="openGoal()">+ Add goal</button></div><div id="goalsList"></div></div>
+</section>
+
+
+<section id="progress" class="view">
+<h1>Progress</h1>
+<div class="sub">See whether your real activity is building momentum over time.</div>
+<div class="layout">
+<div class="panel">
+<div class="panel-title"><h2>Overall progress</h2><button class="link" onclick="renderProgress()">Refresh</button></div>
+<div id="progressChartWrap"></div>
+</div>
+<div>
+<div class="panel">
+<div class="panel-title"><h2>This week</h2></div>
+<div id="progressStats"></div>
+</div>
+<div class="panel" style="margin-top:18px">
+<div class="panel-title"><h2>How it works</h2></div>
+<p class="sub" style="margin:0">Each module has a weekly routine. Progress uses completed planned sessions, so a quick note does not count the same as completing an entire planned session.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="finance" class="view">
+<div class="finhead"><div><h1>Finance</h1><div class="sub" style="margin:0">Plan your money by category and see how much of each budget you've used.</div></div>
+<div class="row"><button class="primary" onclick="openExpense()">+ Add expense</button><button class="secondary" onclick="openCategory()">+ Category</button><button class="secondary" onclick="openFinSettings()">Income &amp; currency</button></div></div>
+<div class="calhead" style="max-width:260px;margin-bottom:14px"><button class="calnav" style="border:0;background:#f2f4f2;border-radius:8px;width:29px;height:29px" onclick="finShift(-1)">‹</button><strong id="finMonthName"></strong><button class="calnav" style="border:0;background:#f2f4f2;border-radius:8px;width:29px;height:29px" onclick="finShift(1)">›</button></div>
+<div id="finBody"></div>
+</section>
+
+<section id="settings" class="view">
+<h1>Settings</h1><div class="sub">Your data is saved in a database file on this computer.</div>
+<div class="panel"><button class="primary" onclick="resetData()">Reset all data</button></div>
+</section>
+</div>
+
+<div class="modal" id="modal"><div class="modalbox" id="modalbox"></div></div><div class="toast" id="toast"></div>
+
+<script>
+const key='lifeos_simple_v1';
+const defaultState={
+ goals:[{id:1,name:'Build a life that moves forward',detail:'Add your own goals and connect modules to them.'}],
+ modules:[
+  {id:1,name:'OTA',icon:'🎖️',color:'#f29d49',items:['Maths','English','GK'],days:[1,2,3,4,5,6,7]},
+  {id:2,name:'Career',icon:'💻',color:'#5b8def',items:['DSA','Projects','Applications'],days:[1,3,5]},
+  {id:3,name:'College',icon:'🎓',color:'#8b6fe8',items:['Classes','Assignments'],days:[1,2,3,4,5]},
+  {id:4,name:'Track',icon:'🏃',color:'#54b879',items:['Run','Speed work'],days:[2,5]},
+  {id:5,name:'Food',icon:'🍽️',color:'#ef7668',items:['Meals','Protein','Water'],days:[1,2,3,4,5,6,7]},
+  {id:6,name:'Life Reset',icon:'🧹',color:'#d7aa45',items:['Sleep','Room','Personal'],days:[1,2,3,4,5,6,7]}
+ ],
+ logs:{}
+};
+let state=structuredClone(defaultState);
+let cal=new Date(); cal.setDate(1); let selected=new Date();
+async function save(){
+  try{
+    const r=await fetch('/api/state',{
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(state)
+    });
+    if(!r.ok) throw new Error('Save failed');
+  }catch(e){
+    console.error(e);
+    toast('Could not save to database');
+  }
+}
+async function loadFromDatabase(){
+  try{
+    const r=await fetch('/api/state');
+    if(!r.ok) throw new Error('Load failed');
+    const remote=await r.json();
+    state=remote;loadFinance();
+    render();
+  }catch(e){
+    console.error(e);
+    toast('Database unavailable — using local defaults');
+    render();
+  }
+}
+function dateKey(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function show(view){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));document.getElementById(view).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===view));render()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>show(b.dataset.view));
+function dayLogs(d){return state.logs[dateKey(d)]||[]}
+function render(){
+ renderModules();renderCalendar();renderWeek();renderGoals();renderInsight();renderProgress();renderFinance();
+}
+function renderModules(){
+ const today=dayLogs(new Date());const el=document.getElementById('modules');
+ el.innerHTML=state.modules.map(m=>{const logs=today.filter(x=>x.moduleId===m.id).length;const planned=m.days.includes(((new Date().getDay()+6)%7)+1);const pct=planned?(logs?100:0):(logs?100:0);
+ return `<div class="module" onclick="openModuleWeek(${m.id})" style="cursor:pointer"><div class="mhead"><div class="icon">${m.icon}</div><div><div class="mname">${esc(m.name)}</div><div class="meta">${m.items.map(esc).join(' · ')}</div></div></div><div class="progress"><i style="width:${pct}%;background:${m.color}"></i></div><div class="mfoot"><span>${logs} log${logs===1?'':'s'} today${planned?'':' · not planned'}</span><button class="logbtn" onclick="event.stopPropagation();logModule(${m.id})">+ Log</button></div></div>`}).join('');
+ if(!state.modules.length) el.innerHTML='<div class="empty">Create your first module.</div>';
+}
+function renderCalendar(){
+ const y=cal.getFullYear(),m=cal.getMonth(),name=cal.toLocaleString('en-US',{month:'long',year:'numeric'});document.getElementById('monthName').textContent=name;
+ const first=new Date(y,m,1), start=(first.getDay()+6)%7, days=new Date(y,m+1,0).getDate(), prev=new Date(y,m,0).getDate();let out='';
+ for(let i=0;i<42;i++){let n=i-start+1, d, muted=false;if(n<1){d=new Date(y,m-1,prev+n);muted=true}else if(n>days){d=new Date(y,m+1,n-days);muted=true}else d=new Date(y,m,n);let cls='day'+(muted?' muted':'');if(dateKey(d)===dateKey(new Date()))cls+=' today';if(dayLogs(d).length)cls+=' logged';out+=`<div class="${cls}" onclick="selectDay('${dateKey(d)}')">${d.getDate()}</div>`}
+ document.getElementById('days').innerHTML=out;selectDay(dateKey(selected),true);
+}
+function selectDay(k,silent){let d=new Date(k+'T12:00:00');selected=d;document.getElementById('selectedDate').textContent=d.toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});let ls=dayLogs(d);document.getElementById('selectedInfo').textContent=ls.length?ls.map(x=>x.text).join(' • '):'No logs yet.';if(!silent)toast('Calendar updated')}
+function changeMonth(n){cal.setMonth(cal.getMonth()+n);renderCalendar()}
+function logModule(id){
+ const m=state.modules.find(x=>x.id===id);openCustom(`<h2>Log ${esc(m.name)}</h2><div class="field"><label>What did you do?</label><input id="modalText" placeholder="${esc(m.items[0]||'Activity')}"></div><div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveLog(${id})">Save log</button></div>`);
+}
+function saveLog(id){let v=document.getElementById('modalText').value.trim();if(!v)return toast('Add a short note first');addLog(id,v);closeModal()}
+function addLog(id,text){let k=dateKey(new Date());state.logs[k]??=[];state.logs[k].push({moduleId:id,text,at:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})});save();render();toast('Logged ✓')}
+function quickLog(){
+ const v=document.getElementById('quick').value.trim();if(!v)return;
+ const low=v.toLowerCase();let m=state.modules.find(x=>low.includes(x.name.toLowerCase()));
+ if(!m){m=state.modules.find(x=>(x.name==='Track'&&/(run|km|pace|track)/.test(low))||(x.name==='Food'&&/(eat|meal|protein|water|food)/.test(low))||(x.name==='OTA'&&/(math|english|gk|study)/.test(low))||(x.name==='Career'&&/(dsa|project|code|application)/.test(low))||(x.name==='Life Reset'&&/(sleep|room|clean|reset)/.test(low)));}
+ if(!m)m=state.modules[0];if(!m)return toast('Create a module first');addLog(m.id,v);document.getElementById('quick').value='';
+}
+function renderWeek(){
+ const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];let h='<div></div>'+days.map(x=>`<div><b>${x}</b></div>`).join('');
+ state.modules.forEach(m=>{h+=`<div class="label">${m.icon} ${esc(m.name)}</div>`;for(let i=1;i<=7;i++){let d=new Date();let diff=i-((d.getDay()+6)%7+1);d.setDate(d.getDate()-((d.getDay()+6)%7)+i-1);let on=dayLogs(d).some(x=>x.moduleId===m.id);h+=`<div><div class="tick ${on?'on':''}">${on?'✓':(m.days.includes(i)?'•':'')}</div></div>`}});document.getElementById('weekgrid').innerHTML=h;
+}
+function renderGoals(){document.getElementById('goalsList').innerHTML=state.goals.map(g=>`<div class="goal"><b>${esc(g.name)}</b><small>${esc(g.detail||'')}</small></div>`).join('')||'<div class="empty">No goals yet.</div>'}
+function renderInsight(){
+ let last7=[];for(let i=0;i<7;i++){let d=new Date();d.setDate(d.getDate()-i);last7.push(dayLogs(d).length)}
+ let total=last7.reduce((a,b)=>a+b,0), prev=0;for(let i=7;i<14;i++){let d=new Date();d.setDate(d.getDate()-i);prev+=dayLogs(d).length}
+ let text=total===0?'Start with one small log today. LifeOS will learn your real patterns.':prev===0?`${total} logs in the last 7 days. Keep building your baseline.`:total<prev?`You logged ${total} times this week vs ${prev} last week. Something may need a lighter, simpler routine.`:`You logged ${total} times this week vs ${prev} last week. Your activity is moving up.`;
+ document.getElementById('insight').textContent=text;
+}
+
+function startOfWeek(d){let x=new Date(d);x.setHours(12,0,0,0);let day=(x.getDay()+6)%7;x.setDate(x.getDate()-day);return x}
+function modulePlannedOn(m,d){return m.days.includes(((d.getDay()+6)%7)+1)}
+function weekScore(start){
+ let planned=0,done=0;
+ state.modules.forEach(m=>{for(let i=0;i<7;i++){let d=new Date(start);d.setDate(start.getDate()+i);if(modulePlannedOn(m,d)){planned++;if(dayLogs(d).some(x=>x.moduleId===m.id))done++;}}});
+ return planned?Math.round(done/planned*100):0
+}
+function renderProgress(){
+ const wrap=document.getElementById('progressChartWrap'); if(!wrap)return;
+ const today=new Date(), weeks=[];
+ for(let i=7;i>=0;i--){let s=startOfWeek(today);s.setDate(s.getDate()-i*7);weeks.push({start:s,score:weekScore(s),label:s.toLocaleDateString('en-US',{month:'short',day:'numeric'})})}
+ const W=680,H=290,L=48,R=20,T=20,B=45, cw=W-L-R,ch=H-T-B;
+ const pts=weeks.map((w,i)=>{let x=L+(i/(weeks.length-1))*cw,y=T+(1-w.score/100)*ch;return {x,y,w}})
+ const path=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1)).join(' ');
+ let svg=`<div class="progressChart"><svg class="chartSvg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+ [0,25,50,75,100].forEach(v=>{let y=T+(1-v/100)*ch;svg+=`<line class="chartGrid" x1="${L}" y1="${y}" x2="${W-R}" y2="${y}"/><text class="chartLabel" x="8" y="${y+4}">${v}%</text>`});
+ svg+=`<path class="chartLine" d="${path}"/>`;
+ pts.forEach((p,i)=>{svg+=`<circle class="chartDot" cx="${p.x}" cy="${p.y}" r="4"/><text class="chartLabel" text-anchor="middle" x="${p.x}" y="${H-17}">${p.w.label}</text>${p.w.score?`<text class="chartValue" text-anchor="middle" x="${p.x}" y="${p.y-10}">${p.w.score}%</text>`:''}`});
+ svg+='</svg></div>';
+ wrap.innerHTML=svg;
+ const current=weeks[weeks.length-1], previous=weeks[weeks.length-2];
+ const delta=current.score-previous.score;
+ document.getElementById('progressStats').innerHTML=
+ `<div class="statRow"><b>This week</b><strong>${current.score}%</strong></div>`+
+ `<div class="statRow"><span>Last week</span><strong>${previous.score}%</strong></div>`+
+ `<div class="statRow"><span>Change</span><strong>${delta>0?'+':''}${delta} pts</strong></div>`+
+ `<div class="statRow"><span>Logged today</span><strong>${dayLogs(new Date()).length}</strong></div>`;
+}
+
+
+let currentModuleId=null;
+function openModuleWeek(id){
+ currentModuleId=id; const m=state.modules.find(x=>x.id===id); if(!m)return;
+ document.getElementById('moduleWeekTitle').textContent=m.icon+' '+m.name;
+ document.getElementById('moduleWeekSub').textContent=(m.items.length?m.items.join(' · '):'Add activities')+' — your weekly plan.';
+ show('moduleWeek'); renderModuleWeek();
+}
+function renderModuleWeek(){
+ const m=state.modules.find(x=>x.id===currentModuleId); if(!m)return;
+ const names=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+ document.getElementById('moduleDays').innerHTML=names.map((n,i)=>{
+   const planned=m.days.includes(i+1);
+   const d=new Date(); let start=startOfWeek(d); start.setDate(start.getDate()+i);
+   const logs=dayLogs(start).filter(x=>x.moduleId===m.id);
+   ensureDayPlans(m); const dayPlan=(m.dayPlans[i+1]||'').trim(); const plan=dayPlan || (planned?(m.items.length?m.items.join(' · '):'Planned session'):'Rest / not planned');
+   return `<div class="dayrow"><div class="dayname">${n}</div><div class="dayplan"><strong>${esc(plan)}</strong>${logs.length?`<br><span>${logs.map(x=>esc(x.text)).join(' · ')}</span>`:''}</div><div class="daystate ${planned?'planned':'off'}">${logs.length?'✓ Logged':planned?'Planned':'Off'}</div></div>`;
+ }).join('');
+}
+function ensureDayPlans(m){
+ if(!m.dayPlans){
+   m.dayPlans={};
+   for(let i=1;i<=7;i++) m.dayPlans[i]=m.days.includes(i)?m.items.join(', '):'';
+ }
+}
+function editCurrentModuleWeek(){
+ const m=state.modules.find(x=>x.id===currentModuleId);if(!m)return;
+ ensureDayPlans(m);
+ const names=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+ openCustom(`<h2>Edit ${esc(m.name)} — day by day</h2>
+ <p class="smallmuted">Each day is independent. Write exactly what you want to do on Monday, Tuesday, Wednesday, etc. Leave a day blank if it is a rest day.</p>
+ <div class="field"><label>Monday</label><input id="dp1" class="schedule-input" value="${esc(m.dayPlans[1]||'')}" placeholder="e.g. Maths — 60 min"></div>
+ <div class="field"><label>Tuesday</label><input id="dp2" class="schedule-input" value="${esc(m.dayPlans[2]||'')}" placeholder="e.g. English — 45 min"></div>
+ <div class="field"><label>Wednesday</label><input id="dp3" class="schedule-input" value="${esc(m.dayPlans[3]||'')}" placeholder="e.g. GK — 60 min"></div>
+ <div class="field"><label>Thursday</label><input id="dp4" class="schedule-input" value="${esc(m.dayPlans[4]||'')}" placeholder="e.g. Maths — 60 min"></div>
+ <div class="field"><label>Friday</label><input id="dp5" class="schedule-input" value="${esc(m.dayPlans[5]||'')}" placeholder="e.g. English — 45 min"></div>
+ <div class="field"><label>Saturday</label><input id="dp6" class="schedule-input" value="${esc(m.dayPlans[6]||'')}" placeholder="e.g. GK + Current Affairs"></div>
+ <div class="field"><label>Sunday</label><input id="dp7" class="schedule-input" value="${esc(m.dayPlans[7]||'')}" placeholder="e.g. Mock / Revision"></div>
+ <div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveCurrentModuleWeek()">Save weekly plan</button></div>`);
+}
+function saveCurrentModuleWeek(){
+ const m=state.modules.find(x=>x.id===currentModuleId);if(!m)return;
+ ensureDayPlans(m);m.days=[];
+ for(let i=1;i<=7;i++){m.dayPlans[i]=document.getElementById('dp'+i).value.trim();if(m.dayPlans[i])m.days.push(i)}
+ m.items=[...new Set(Object.values(m.dayPlans).join(',').split(',').map(x=>x.trim()).filter(Boolean))];
+ save();closeModal();render();renderModuleWeek();toast('Each day updated ✓');
+}
+function editCurrentModule(){
+ const m=state.modules.find(x=>x.id===currentModuleId);if(!m)return;
+ openCustom(`<h2>Edit module</h2>
+ <div class="formrow"><div class="field"><label>Name</label><input id="emn" value="${esc(m.name)}"></div><div class="field"><label>Icon</label><input id="emi" value="${esc(m.icon)}"></div></div>
+ <div class="field"><label>Activities</label><input id="emit" value="${esc(m.items.join(', '))}"></div>
+ <div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveCurrentModule()">Save</button></div>`);
+}
+function saveCurrentModule(){
+ const m=state.modules.find(x=>x.id===currentModuleId);if(!m)return;
+ const n=document.getElementById('emn').value.trim();if(!n)return toast('Give the module a name');
+ m.name=n;m.icon=document.getElementById('emi').value||'✨';m.items=document.getElementById('emit').value.split(',').map(x=>x.trim()).filter(Boolean);
+ save();closeModal();document.getElementById('moduleWeekTitle').textContent=m.icon+' '+m.name;document.getElementById('moduleWeekSub').textContent=(m.items.length?m.items.join(' · '):'Add activities')+' — your weekly plan.';render();renderModuleWeek();toast('Module updated ✓');
+}
+
+function openModule(){openCustom(`<h2>New module</h2><div class="formrow"><div class="field"><label>Name</label><input id="mn" placeholder="e.g. Business"></div><div class="field"><label>Icon</label><input id="mi" value="✨"></div></div><div class="field"><label>What belongs inside?</label><input id="mit" placeholder="Coding, research, outreach"></div><div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="createModule()">Create</button></div>`)}
+function createModule(){let n=document.getElementById('mn').value.trim();if(!n)return toast('Give the module a name');let items=document.getElementById('mit').value.split(',').map(x=>x.trim()).filter(Boolean);state.modules.push({id:Date.now(),name:n,icon:document.getElementById('mi').value||'✨',color:'#2f8f72',items,days:[1,2,3,4,5,6,7],dayPlans:{1:items.join(', '),2:items.join(', '),3:items.join(', '),4:items.join(', '),5:items.join(', '),6:items.join(', '),7:items.join(', ')}});save();closeModal();render();toast('Module created ✓')}
+function openGoal(){openCustom(`<h2>New goal</h2><div class="field"><label>Goal</label><input id="gn" placeholder="What are you working toward?"></div><div class="field"><label>Why / detail</label><input id="gd" placeholder="Optional"></div><div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="createGoal()">Add goal</button></div>`)}
+function createGoal(){let n=document.getElementById('gn').value.trim();if(!n)return toast('Give the goal a name');state.goals.push({id:Date.now(),name:n,detail:document.getElementById('gd').value.trim()});save();closeModal();render();toast('Goal added ✓')}
+function openRoutine(){openCustom(`<h2>Edit routines</h2><p style="color:var(--muted);font-size:13px">For each module, choose the days you want it active. You can add activities from the Home module card later.</p>${state.modules.map(m=>`<div class="field"><label>${m.icon} ${esc(m.name)}</label><input id="days${m.id}" value="${m.days.join(',')}" placeholder="1,2,3,4,5,6,7"><small style="color:var(--muted)">1=Mon … 7=Sun</small></div>`).join('')}<div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveRoutine()">Save</button></div>`)}
+function saveRoutine(){state.modules.forEach(m=>{let v=document.getElementById('days'+m.id).value.split(',').map(Number).filter(n=>n>=1&&n<=7);m.days=[...new Set(v)]});save();closeModal();render();toast('Routine updated ✓')}
+function openCustom(html){document.getElementById('modalbox').innerHTML=html;document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')closeModal()}
+async function resetData(){
+  if(confirm('Reset all LifeOS data?')){
+    try{
+      const r=await fetch('/api/reset',{method:'DELETE'});
+      if(!r.ok) throw new Error('Reset failed');
+      state=structuredClone(defaultState);
+      await save();
+      render();
+      await loadFinance();toast('All data reset ✓');
+    }catch(e){
+      console.error(e);
+      toast('Could not reset database');
+    }
+  }
+}
+function toast(s){let t=document.getElementById('toast');t.textContent=s;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1700)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+/* ---------- Finance ---------- */
+let fin={currency:'₹',income:0,categories:[],entries:[]};
+let finMonth=dateKey(new Date()).slice(0,7);
+const money=n=>fin.currency+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
+async function api(method,url,body){
+  const r=await fetch(url,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Request failed');return j;
+}
+async function loadFinance(){try{fin=await api('GET','/api/finance?month='+finMonth);renderFinance()}catch(e){console.error(e);toast('Could not load finance data')}}
+function finShift(n){const [y,m]=finMonth.split('-').map(Number);finMonth=dateKey(new Date(y,m-1+n,1)).slice(0,7);loadFinance()}
+function finColor(p,base){return p>100?'#d9534f':p>=80?'#e0a030':base}
+function finBar(spent,budget,base,tall){const p=budget?spent/budget*100:0;return `<div class="progress ${tall?'tall':''}"><i style="width:${Math.min(p,100)}%;background:${finColor(p,base)}"></i></div>`}
+function renderFinance(){
+  const el=document.getElementById('finBody');if(!el)return;
+  document.getElementById('finMonthName').textContent=new Date(finMonth+'-01T12:00:00').toLocaleString('en-US',{month:'long',year:'numeric'});
+  const allocated=fin.categories.reduce((a,c)=>a+c.budget,0),spent=fin.categories.reduce((a,c)=>a+c.spent,0);
+  const income=fin.income||0,goal=fin.savingsGoal||0;
+  const budget=income?Math.max(income-goal,0):allocated;
+  const p=budget?Math.round(spent/budget*100):0,left=budget-spent;
+  const saved=income-spent,sp=goal?Math.round(Math.max(saved,0)/goal*100):0,diff=allocated-budget;
+  const plan=`<div class="panel" style="margin-bottom:18px"><div class="panel-title"><h2>Monthly plan</h2><span class="smallmuted">Change any number — it saves automatically</span></div>
+  <div class="formrow"><div class="field"><label>Monthly income (${esc(fin.currency)})</label><input type="number" min="0" step="1" value="${income||''}" placeholder="0" onchange="setPlan('income',this.value)"></div>
+  <div class="field"><label>Amount I want to save (${esc(fin.currency)})</label><input type="number" min="0" step="1" value="${goal||''}" placeholder="0" onchange="setPlan('savingsGoal',this.value)"></div></div>
+  <div class="statRow"><span>Spending budget (income − savings)</span><strong>${money(budget)}</strong></div>
+  <div class="statRow"><span>${diff>0?'Categories are over-allocated by':'Not yet given to a category'}</span><strong style="color:${diff>0?'#d9534f':'inherit'}">${money(Math.abs(diff))}</strong></div>
+  ${goal?`<div class="panel-title" style="margin:16px 0 0"><h2 style="font-size:14px">Savings goal</h2><strong style="color:${sp>=100?'#2f8f72':'#e0a030'}">${sp}%</strong></div><div class="progress tall"><i style="width:${Math.min(sp,100)}%;background:${sp>=100?'#2f8f72':'#e0a030'}"></i></div><div class="smallmuted">${money(Math.max(saved,0))} of ${money(goal)} — projected as income minus what you've spent so far</div>`:''}</div>`;
+  const overview=`<div class="panel" style="margin-bottom:18px"><div class="panel-title"><h2>Monthly budget used</h2><span class="finbig" style="color:${finColor(p,'#2f8f72')}">${p}%</span></div>${finBar(spent,budget,'#2f8f72',true)}
+  <div class="statRow"><span>Spent</span><strong>${money(spent)}</strong></div><div class="statRow"><span>Spending budget</span><strong>${money(budget)}</strong></div>
+  <div class="statRow"><span>${left>=0?'Left to spend':'Over budget by'}</span><strong>${money(Math.abs(left))}</strong></div></div>`;
+  const cats=fin.categories.map(c=>{const cp=c.budget?Math.round(c.spent/c.budget*100):0;
+    return `<div class="module" style="cursor:pointer" onclick="openCategory(${c.id})"><div class="mhead"><div class="icon">${esc(c.icon)}</div><div><div class="mname">${esc(c.name)}</div><div class="meta">${c.budget?'Budget '+money(c.budget):'No budget set'}</div></div></div>
+    ${finBar(c.spent,c.budget,c.color)}<div class="mfoot"><span>${money(c.spent)}${c.budget?' · <b style="color:'+finColor(cp,'#71807a')+'">'+cp+'%</b> used':''}</span><button class="logbtn" onclick="event.stopPropagation();openExpense(${c.id})">+ Add</button></div></div>`}).join('')||'<div class="empty">Add a category to start planning.</div>';
+  const byId=Object.fromEntries(fin.categories.map(c=>[c.id,c]));
+  const rows=fin.entries.map(e=>{const c=byId[e.categoryId]||{icon:'💰',name:''};return `<div class="finrow"><span class="smallmuted">${e.date.slice(5)}</span><span>${esc(c.icon)} ${esc(c.name)}${e.note?' — '+esc(e.note):''}</span><b>${money(e.amount)}</b><button class="x" title="Delete" onclick="delExpense(${e.id})">✕</button></div>`}).join('')||'<div class="empty">No expenses this month.</div>';
+  el.innerHTML=plan+overview+`<div class="panel"><div class="panel-title"><h2>Categories</h2></div><div class="modules">${cats}</div></div><div class="panel" style="margin-top:18px"><div class="panel-title"><h2>Expenses this month</h2></div>${rows}</div>`;
+}
+function openExpense(catId){
+  if(!fin.categories.length)return toast('Add a category first');
+  const today=dateKey(new Date()),date=today.slice(0,7)===finMonth?today:finMonth+'-01';
+  openCustom(`<h2>Add expense</h2><div class="formrow"><div class="field"><label>Amount</label><input id="fa" type="number" min="0" step="0.01" placeholder="0"></div><div class="field"><label>Date</label><input id="fd" type="date" value="${date}"></div></div>
+  <div class="field"><label>Category</label><select id="fc">${fin.categories.map(c=>`<option value="${c.id}" ${c.id===catId?'selected':''}>${esc(c.icon)} ${esc(c.name)}</option>`).join('')}</select></div>
+  <div class="field"><label>Note (optional)</label><input id="fn" placeholder="e.g. Lunch with friends"></div>
+  <div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveExpense()">Save</button></div>`);
+  document.getElementById('fa').focus();
+}
+async function saveExpense(){
+  try{await api('POST','/api/finance/entries',{amount:document.getElementById('fa').value,date:document.getElementById('fd').value,categoryId:document.getElementById('fc').value,note:document.getElementById('fn').value});
+    closeModal();await loadFinance();toast('Expense added ✓')}catch(e){toast(e.message)}
+}
+async function delExpense(id){if(!confirm('Delete this expense?'))return;try{await api('DELETE','/api/finance/entries/'+id);await loadFinance()}catch(e){toast(e.message)}}
+function openCategory(id){
+  const c=fin.categories.find(x=>x.id===id)||{name:'',icon:'💰',color:'#2f8f72',budget:''};
+  openCustom(`<h2>${id?'Edit':'New'} category</h2><div class="formrow"><div class="field"><label>Name</label><input id="cn" value="${esc(c.name)}" placeholder="e.g. Groceries"></div><div class="field"><label>Icon</label><input id="ci" value="${esc(c.icon)}"></div></div>
+  <div class="formrow"><div class="field"><label>Monthly budget</label><input id="cb" type="number" min="0" step="1" value="${c.budget}" placeholder="0"></div><div class="field"><label>Colour</label><input id="cc" type="color" value="${c.color}"></div></div>
+  <div class="actions">${id?`<button class="secondary" style="margin-right:auto;color:#d9534f" onclick="delCategory(${id})">Delete</button>`:''}<button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveCategory(${id||0})">Save</button></div>`);
+}
+async function saveCategory(id){
+  const b={name:document.getElementById('cn').value,icon:document.getElementById('ci').value,budget:document.getElementById('cb').value||0,color:document.getElementById('cc').value};
+  try{await api(id?'PUT':'POST','/api/finance/categories'+(id?'/'+id:''),b);closeModal();await loadFinance();toast('Category saved ✓')}catch(e){toast(e.message)}
+}
+async function delCategory(id){if(!confirm('Delete this category and all its expenses?'))return;try{await api('DELETE','/api/finance/categories/'+id);closeModal();await loadFinance()}catch(e){toast(e.message)}}
+function openFinSettings(){
+  openCustom(`<h2>Income &amp; currency</h2><div class="formrow"><div class="field"><label>Monthly income</label><input id="si" type="number" min="0" value="${fin.income||''}" placeholder="0"></div><div class="field"><label>Currency symbol</label><input id="sc" value="${esc(fin.currency)}" maxlength="4"></div></div>
+  <div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" onclick="saveFinSettings()">Save</button></div>`);
+}
+async function setPlan(k,v){try{await api('PUT','/api/finance/settings',{[k]:v||0});await loadFinance()}catch(e){toast(e.message)}}
+async function saveFinSettings(){try{await api('PUT','/api/finance/settings',{income:document.getElementById('si').value||0,currency:document.getElementById('sc').value});closeModal();await loadFinance()}catch(e){toast(e.message)}}
+
+render();
+loadFromDatabase();
+</script>
+</body>
+</html>
