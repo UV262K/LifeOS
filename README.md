@@ -1,51 +1,56 @@
-# LifeOS
+# 🧠 LifeOS
 
-A local-first personal productivity and finance dashboard built with Node.js, SQLite, HTML, CSS, and JavaScript.
+A local-first personal productivity and finance dashboard designed to bring planning, routines, goals, activity tracking, and budgeting into one lightweight application.
 
-LifeOS combines weekly planning, modular routines, goals, activity logging, progress tracking, and personal budgeting in one lightweight application.
+## ✨ Features
 
-## Features
+- 📅 Weekly planning and daily logs
+- 🎯 Goals and quick activity tracking
+- 🧩 Modular routines for areas such as OTA, Career, College, Track, Food, and Life Reset
+- 📊 Progress and weekly completion tracking
+- 💰 Monthly finance categories and budgets
+- 🧾 Expense and income tracking
+- 📈 Budget utilization percentages
+- 🌍 Configurable currency settings
+- 💾 Local SQLite persistence
+- 📱 Responsive single-page frontend
+- ⚡ No external npm runtime dependencies
 
-- Modular planning for areas such as OTA, Career, College, Track, Food, and Life Reset
-- Weekly routine and day-by-day planning
-- Goals and quick activity logging
-- Calendar-based daily logs
-- Progress tracking with weekly completion scores
-- Finance categories with monthly budgets
-- Expense tracking and budget utilization
-- Income and currency settings
-- Local SQLite persistence
-- Responsive single-page frontend
-- Zero external npm runtime dependencies
+## 🏗️ Architecture
 
-## Architecture
-
+```text
+┌─────────────────────────────┐
+│        Browser UI           │
+│      HTML / CSS / JS        │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│       Node.js Server        │
+│       REST-style API        │
+└──────────────┬──────────────┘
+               │
+               ▼
+┌─────────────────────────────┐
+│       SQLite Database       │
+│       Local persistence     │
+└─────────────────────────────┘
 ```
-Browser
-   ↓
-HTML / CSS / JavaScript frontend
-   ↓
-Node.js HTTP server
-   ↓
-REST-style /api endpoints
-   ↓
-SQLite database (data/lifeos.db)
-```
 
-The backend serves the frontend and exposes the application API. User data is stored locally on the machine rather than in a remote database.
+User data is stored locally rather than in a remote database.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 - **Frontend:** HTML, CSS, JavaScript
 - **Backend:** Node.js
 - **Database:** SQLite via Node's built-in `node:sqlite`
-- **APIs:** HTTP/JSON REST-style endpoints
+- **API:** HTTP/JSON REST-style endpoints
 - **Runtime:** Node.js 22.13+
 - **Dependencies:** No npm packages required
 
-## Project Structure
+## 📁 Project Structure
 
-```
+```text
 LifeOS/
 ├── backend/
 │   └── server.js
@@ -58,17 +63,15 @@ LifeOS/
 └── README.md
 ```
 
-## Run Locally
+## 🚀 Run Locally
 
 ### Requirements
 
-Node.js **22.13 or newer**.
+- Node.js **22.13 or newer**
 
 ### Windows
 
-Double-click:
-
-```
+```text
 start-lifeos-windows.bat
 ```
 
@@ -79,39 +82,39 @@ chmod +x start-lifeos-mac-linux.sh
 ./start-lifeos-mac-linux.sh
 ```
 
-Or run directly:
+Or:
 
 ```bash
 npm start
 ```
 
-LifeOS runs locally and opens in the browser.
+The application runs locally and opens in the browser.
 
-## Data & Privacy
+## 🔐 Data & Privacy
 
-The application creates:
+LifeOS creates a local database:
 
-```
+```text
 data/lifeos.db
 ```
 
-The `data/` directory and database files are excluded from Git through `.gitignore`, so personal LifeOS data is not committed to the repository.
+The `data/` directory and database files are excluded from Git so personal application data is not committed to the repository.
 
-## Finance Module
+## 💰 Finance Module
 
-The finance module supports:
+The finance module includes:
 
 - Custom spending categories
 - Monthly category budgets
 - Expense entries
 - Monthly spending totals
-- Budget utilization percentages
+- Budget utilization
 - Income tracking
-- Currency symbol configuration
+- Currency configuration
 
-## API
+## 🔌 API
 
-The backend includes endpoints for:
+The backend exposes functionality for:
 
 - Application health
 - Planner state
@@ -121,13 +124,21 @@ The backend includes endpoints for:
 - Finance entries
 - Finance settings
 
-## Roadmap
+## 🗺️ Roadmap
 
-Potential future improvements include cloud synchronization, authentication, mobile deployment, external financial integrations, and richer analytics.
+- Cloud synchronization
+- Authentication
+- Mobile deployment
+- External financial integrations
+- Expanded analytics
+- More visualization and reporting
 
-## Author
+## 👨‍💻 Author
 
-**Yuvraj Singh Pathania**  
+**Yuvraj Singh Pathania**
+
 B.Sc. Computer Science (Hons.) — Cloud Computing  
 MIT World Peace University, Pune
+
+GitHub: [@UV262K](https://github.com/UV262K)
 
