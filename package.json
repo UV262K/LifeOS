@@ -1,0 +1,8 @@
+{
+  "name": "lifeos-local",
+  "version": "2.0.0",
+  "private": true,
+  "description": "LifeOS - personal planner with local SQLite database",
+  "scripts": { "start": "node backend/server.js" },
+  "engines": { "node": ">=22.13.0" }
+}
