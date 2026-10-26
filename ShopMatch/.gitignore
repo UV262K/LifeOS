@@ -1,0 +1,19 @@
+# R session files
+.RData
+.Rhistory
+.Ruserdata
+.Rproj.user/
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+~$*.xlsx
+
+# Generated outputs
+outputs/
+
+# Local datasets are downloaded separately
+Online Retail.xlsx
+data.csv
